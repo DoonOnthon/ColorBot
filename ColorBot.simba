@@ -1,0 +1,39 @@
+{$I SRL-T/osr.simba}
+{$I WaspLib/osr.simba}
+
+var
+  RSW: TRSWalker;
+  GETile: TPoint := [8050, 2528];
+
+procedure Init;
+begin
+  RSW.Setup('world');
+
+  Login.AddPlayer('username', 'password', 'bankpin');
+  if not RSClient.IsLoggedIn then
+    Login.LoginPlayer;
+end;
+
+function AtTile(Tile: TPoint; Distance: Int32 = 15): Boolean;
+begin
+  Result := RSW.GetMyPos.DistanceTo(Tile) <= Distance;
+end;
+
+begin
+  Init;
+
+  while True do
+  begin
+    if not AtTile(GETile) then
+      RSW.WebWalk(GETile, 10, 0.2);
+    end
+    else
+    begin
+      Writeln(RSW.GetMyPos);
+      RSW.DebugPosition;
+  end;
+end.
+
+
+
+
